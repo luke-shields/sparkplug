@@ -80,6 +80,7 @@ public class TCK {
     public void newTest(final @NotNull Profile profile, final @NotNull String test, final @NotNull String[] parms) {
 
         LOGGER.info("Test requested " + profile.name().toLowerCase() + " " + test);
+        MQTTLog("Test requested " + profile.name().toLowerCase() + " " + test);
 
         try {
             final Class testClass =
@@ -96,11 +97,13 @@ public class TCK {
                     final Constructor constructor = testClass.getConstructor(types);
                     final Object[] parameters = {this, parms, results.getConfig()};
                     current = (TCKTest) constructor.newInstance(parameters);
+                    MQTTLog("NoSuchMethod e");
                 } catch (NoSuchMethodException f) {
                     final Class[] types = {this.getClass(), Utilities.class, String[].class, Results.Config.class};
                     final Constructor constructor = testClass.getConstructor(types);
                     final Object[] parameters = {this, utilities, parms, results.getConfig()};
                     current = (TCKTest) constructor.newInstance(parameters);
+                    MQTTLog("NoSuchMethod f");
                 }
             }
 
@@ -117,12 +120,14 @@ public class TCK {
             
         } catch (java.lang.reflect.InvocationTargetException e) {
             LOGGER.error("Error starting test " + profile.name().toLowerCase() + "." + test);
+            MQTTLog("Error starting test " + profile.name().toLowerCase() + "." + test);
             if (e.getMessage() != null) {
                 LOGGER.error(e.getMessage());
             }
             MQTTResults("OVERALL: NOT EXECUTED"); // Ensure the test ends
         } catch (final Exception e) {
             LOGGER.error("Could not find or set test class " + profile.name().toLowerCase() + "." + test, e);
+            MQTTLog("Could not find or set test class " + profile.name().toLowerCase() + "." + test);
         }
     }
 
