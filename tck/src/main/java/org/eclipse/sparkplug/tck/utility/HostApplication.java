@@ -112,13 +112,16 @@ public class HostApplication {
 		logger.info("Creating new host \"" + host_application_id + "\"");
 		hostApplicationId = host_application_id;
 		host = new MqttClient(brokerURI, "Sparkplug_TCK_" + host_application_id);
+		logger.info("Setting message listener");
 		listener = new MessageListener();
+		logger.info("Setting callback");
 		host.setCallback(listener);
 
 		stateTopic = host.getTopic(Constants.TOPIC_ROOT_STATE + "/" + host_application_id);
 
 		// Set up the BIRTH and DEATH payloads
 		try {
+			logger.info("Setting BD Payloads");
 			long now = System.currentTimeMillis();
 			ObjectMapper mapper = new ObjectMapper();
 			StatePayload birthStatePayload = new StatePayload(true, now);
@@ -129,9 +132,13 @@ public class HostApplication {
 			logger.error("Failed to construct Host ID payloads - not starting", e);
 			return;
 		}
+		logger.info("Set payloads");
 
 		MqttConnectOptions connectOptions = new MqttConnectOptions();
+
+		logger.info("Setting will");
 		connectOptions.setWill(stateTopic, deathPayload, 1, true);
+		logger.info("Connecting");
 		host.connect(connectOptions);
 		logger.info("Host " + host_application_id + " successfully created");
 	}
