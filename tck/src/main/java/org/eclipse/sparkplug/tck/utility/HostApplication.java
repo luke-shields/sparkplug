@@ -139,7 +139,13 @@ public class HostApplication {
 		logger.info("Setting will");
 		connectOptions.setWill(stateTopic, deathPayload, 1, true);
 		logger.info("Connecting");
-		host.connect(connectOptions);
+
+		try {
+			host.connect(connectOptions);
+		} catch (MqttException e){
+			logger.error(e.getMessage());
+			logger.error("Reason code: " + e.getReasonCode());
+		}
 		logger.info("Host " + host_application_id + " successfully created");
 	}
 
