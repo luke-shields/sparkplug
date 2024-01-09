@@ -138,6 +138,12 @@ public class HostApplication {
 
 		logger.info("Setting will");
 		connectOptions.setWill(stateTopic, deathPayload, 1, true);
+
+		connectOptions.setAutomaticReconnect(true);
+		connectOptions.setCleanSession(true);
+		connectOptions.setConnectionTimeout(30);
+		connectOptions.setKeepAliveInterval(30);
+
 		logger.info("Connecting");
 
 		try {
