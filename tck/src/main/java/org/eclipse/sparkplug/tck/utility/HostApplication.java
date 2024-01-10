@@ -147,7 +147,7 @@ public class HostApplication {
 		logger.info("Connecting");
 
 		try {
-			host.setTimeToWait(5000);
+			host.setTimeToWait(10000);
 			host.connect(connectOptions);
 		} catch (MqttException e){
 			logger.error(e.getMessage());
